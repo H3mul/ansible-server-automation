@@ -1,0 +1,63 @@
+---
+- import_tasks: collect-host-facts.yml
+  tags:
+    - host-facts
+
+- import_tasks: remove-snap.yml
+  tags:
+    - remove-snap
+  when: remove_snap == true
+
+- import_tasks: apt.yml
+  tags:
+    - apt
+
+- import_tasks: pip.yml
+  tags:
+    - pip
+      
+- import_tasks: locale.yml
+  tags:
+    - locale
+
+- import_tasks: timezone.yml
+  tags:
+    - timezone
+
+- import_tasks: hostname.yml
+  tags:
+    - hostname
+
+- import_tasks: dns.yml
+  tags:
+    - dns
+
+- import_tasks: sudoers.yml
+  tags:
+    - sudoers
+
+- import_tasks: disable-ipv6.yml
+  tags:
+    - disable-ipv6
+
+# - import_tasks: system-config-rpi.yml
+#   tags:
+#     - system-config
+#     - rpi
+#   when: var_host_type is defined and var_host_type == "rpi"
+
+# - import_tasks: config-rpi-eeprom.yml
+#   tags:
+#     - rpi-eeprom
+#     - rpi
+#   when: var_host_type is defined and var_host_type == "rpi"
+
+# - import_tasks: system-config-jetson-nano.yml
+#   tags:
+#     - system-config
+#     - jetson-nano
+#   when: var_host_type is defined and var_host_type == "jetson-nano"
+
+- import_tasks: apparmor-setup.yml
+  tags:
+    - apparmor

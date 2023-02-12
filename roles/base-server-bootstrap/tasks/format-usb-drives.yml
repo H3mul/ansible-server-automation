@@ -1,0 +1,29 @@
+# Set up the sandisk flash drives
+
+- name: Grab all usb disk paths
+  set_fact:
+    usb_storage_devices: "{{ hostvars[inventory_hostname].ansible_devices | dict2items | selectattr('value.vendor', 'equalto', 'USB') | list | items2dict }}"
+
+- name: Unmount the disks
+  mount:
+    path: "/dev/{{ item }}1"
+    state: unmounted
+  with_items: "{{ usb_storage_devices.keys() }}"
+
+- name: Format disks
+  parted:
+    device: "/dev/{{ item }}"
+    number: 1
+    state: present
+    fs_type: ext4
+  register: parted_info
+  with_items: "{{ usb_storage_devices.keys() }}"
+
+- name: Create a ext4 filesystem on new partitions
+  community.general.filesystem:
+    fstype: ext4
+    dev: "/dev/{{ item }}1"
+    force: yes
+  register: mkfs_info 
+  with_items: "{{ usb_storage_devices.keys() }}"
+  ignore_errors: yes

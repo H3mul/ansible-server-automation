@@ -1,0 +1,13 @@
+---
+
+- name: add dns to systemd-resolved
+  ini_file:
+    path: /etc/systemd/resolved.conf
+    section: Resolve
+    option: DNS
+    value: 1.1.1.1
+
+- name: restart resolved
+  systemd:
+    name: systemd-resolved
+    state: restarted

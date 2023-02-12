@@ -1,0 +1,16 @@
+---
+
+- name: Install eeprom tool
+  apt:
+    state: latest
+    name: rpi-eeprom
+
+- name: Update eeprom-update release target
+  lineinfile:
+    path: /etc/default/rpi-eeprom-update
+    regexp: ^FIRMWARE_RELEASE_STATUS=
+    line: FIRMWARE_RELEASE_STATUS="stable"
+
+- name: Update eeprom
+  command: rpi-eeprom-update -d -a
+  ignore_errors: yes

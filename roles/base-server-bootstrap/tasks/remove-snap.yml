@@ -1,0 +1,23 @@
+---
+- name: Check is snap installed
+  shell: command -v snap >/dev/null 2>&1
+  register: snap_exists
+  ignore_errors: yes
+
+- name: Remove snaps
+  snap:
+    state: absent
+    name: "{{ item }}"
+  with_items:
+      - lxd
+      - core18
+      - snapd
+  when: snap_exists.rc == 1
+
+- name: Uninstall snap
+  apt:
+    state: absent
+    purge: true
+    autoremove: true
+    name: snapd
+  when: snap_exists.rc == 1

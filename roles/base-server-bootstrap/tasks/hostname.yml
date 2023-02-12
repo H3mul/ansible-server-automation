@@ -1,0 +1,7 @@
+---
+# tasks file for common
+- name: Set the hostname
+  hostname:
+    name: "{{ var_hostname }}"
+  when: var_hostname is defined
+

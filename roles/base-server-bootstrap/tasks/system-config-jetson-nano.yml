@@ -1,0 +1,29 @@
+- name: Display display manager, zram
+  systemd:
+    state: stopped
+    enabled: no
+    name: "{{ item }}"
+  with_items:
+    - gdm3
+    - nvzramconfig
+
+- name: Change default target to multi-user.target
+  file:
+    src: /lib/systemd/system/multi-user.target
+    dest: /etc/systemd/system/default.target
+    state: link
+
+- name: Delete jetson ubuntu desktop
+  apt:
+    state: absent
+    purge: yes
+    autoremove: yes
+    autoclean: yes
+    name:
+      - ubuntu-desktop
+      - chromium-browser
+
+- name: Set to Max-N power mode
+  command: nvpmodel -m 0
+  become: yes
+

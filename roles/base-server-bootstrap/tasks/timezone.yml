@@ -1,0 +1,6 @@
+---
+
+- name: Set the timezone
+  timezone:
+    name: America/Vancouver
+

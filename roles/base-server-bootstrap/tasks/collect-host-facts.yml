@@ -1,0 +1,13 @@
+- name: get arch
+  command: dpkg --print-architecture
+  register: system_arch_stdout
+
+- name: get lsb_release
+  command: lsb_release -cs
+  register: system_lsb_release_stdout
+
+- set_fact:
+    system_arch: "{{ system_arch_stdout.stdout }}"
+
+- set_fact:
+    system_lsb_release: "{{ system_lsb_release_stdout.stdout }}"
