@@ -36,6 +36,10 @@
   tags:
     - sudoers
 
+- import_tasks: alternatives.yml
+  tags:
+    - alternatives
+
 - import_tasks: disable-ipv6.yml
   tags:
     - disable-ipv6
