@@ -1,7 +1,4 @@
 ---
-- import_tasks: collect-host-facts.yml
-  tags:
-    - host-facts
 
 - import_tasks: remove-snap.yml
   tags:
@@ -11,10 +8,6 @@
 - import_tasks: apt.yml
   tags:
     - apt
-
-- import_tasks: pip.yml
-  tags:
-    - pip
       
 - import_tasks: locale.yml
   tags:
@@ -43,6 +36,10 @@
 - import_tasks: disable-ipv6.yml
   tags:
     - disable-ipv6
+
+- import_tasks: enable-ip-forwarding.yml
+  tags:
+    - enable-ip-forwarding
 
 # - import_tasks: system-config-rpi.yml
 #   tags:
