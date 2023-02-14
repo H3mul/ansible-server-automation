@@ -1,12 +1,5 @@
 ---
 
-- name: Check is k3s is installed
-  shell: command -v k3s kubectl get nodes
-  register: k3s_joined
-  ignore_errors: yes
-
-- import_tasks: install.yml
+- import_tasks: install-k3s.yml
   tags:
     - k3s-install
-  when: k3s_joined.rc == 1
-  

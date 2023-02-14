@@ -1,0 +1,21 @@
+- name: Check if flux is installed
+  shell: command -v flux
+  register: flux_installed
+  ignore_errors: yes
+
+- name: Download flux installer script
+  get_url:
+    url: https://fluxcd.io/install.sh
+    dest: /tmp/fluxcd-install.sh
+    mode: 0755
+  when: flux_installed.rc != 0
+
+- name: Install fluxcd
+  shell: /tmp/fluxcd-install.sh
+  when: flux_installed.rc != 0
+
+- name: Delete installer script
+  file:
+    path: /tmp/fluxcd-install.sh
+    state: absent
+  when: flux_installed.rc != 0

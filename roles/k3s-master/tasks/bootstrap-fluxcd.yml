@@ -1,0 +1,22 @@
+- name: Get cluster contents
+  run_once: true
+  delegate_to: "{{ k3s_leader_host }}"
+  shell: k3s kubectl get pods --namespace flux-system -o json
+  register: flux_cluster_info_json
+  ignore_errors: yes
+
+- name: Check if FluxCD already bootstrapped
+  local_action:
+    module: set_fact
+    flux_bootstrapped: "{{ flux_cluster_info_json.stdout | from_json | json_query('items[]') | length > 0}}"
+
+- name: Bootstrap cluster with FluxCD
+  shell: >
+    flux bootstrap github \
+      --owner={{ fluxcd_github_user }} \
+      --repository={{ fluxcd_github_repo }} \
+      --personal \
+      --path {{ fluxcd_github_repo_path }}
+  environment:
+    GITHUB_TOKEN: "{{ fluxcd_github_token }}"
+  when: flux_bootstrapped == False
