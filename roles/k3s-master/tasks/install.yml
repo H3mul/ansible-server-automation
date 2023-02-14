@@ -1,3 +1,4 @@
+
 - name: Download k3s installer script
   get_url:
     url: https://get.k3s.io
@@ -5,9 +6,17 @@
     mode: 0755
 
 - name: Install k3s and init cluster
+  delegate_to: "{{ k3s_leader_host }}"
+  run_once: true
   shell: /tmp/k3s-install.sh --disable traefik --disable servicelb server --cluster-init
   environment:
     K3S_TOKEN: "{{ k3s_token }}"
+
+- name: Install k3s and join cluster as master
+  shell: "/tmp/k3s-install.sh server --disable servicelb --server https://{{ k3s_leader_address }}:6443"
+  environment:
+    K3S_TOKEN: "{{ k3s_token }}"
+  when: k3s_leader_host != ansible_hostname"
 
 - name: Delete installer script
   file:
@@ -15,4 +24,4 @@
     state: absent
 
 - name: Test K3S is up
-  shell: k3s kubectl get nodes -o wide
+  shell: k3s kubectl get nodes
